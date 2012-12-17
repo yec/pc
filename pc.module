@@ -148,7 +148,9 @@ class Parse {
                                          self::Event_IsEmptyRow        => self::State_None),
 
         self::State_GraphNew    => array(self::Event_IsRow        => self::State_Graph),
-        self::State_Graph       => array(self::Event_IsRow        => self::State_Graph),
+
+        self::State_Graph       => array(self::Event_IsRow             => self::State_Graph,
+                                         self::Event_IsEmptyRow        => self::State_None),
     );
 
     // Fields
