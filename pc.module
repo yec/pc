@@ -1,0 +1,183 @@
+<?php
+
+define('COL_START'      , 'B');      // The first significant column in xlsx
+define('COL_END'        , 'D');      // The last column in xlsx
+define('COL_VISIBILITY' , 'I'); // The column that toggles visibility in xlsx
+
+require_once 'lib/PHPExcel/Classes/PHPExcel/IOFactory.php';
+
+function pc_menu() {
+    $items['admin/property-compendium'] = array(
+        'title' => 'Property compendium',
+        'description' => 'Upload and manage property compendium data',
+        'page callback' => 'drupal_get_form',
+        'page arguments' => array('pc_upload_form'),
+        'access callback' => true
+    );
+
+    $items['property-portfolio/profiles/%pc_property'] = array(
+        'title callback' => 'pc_title',
+        'title arguments' => array(2),
+        'page callback' => 'pc_property_page',
+        'page arguments' => array(2),
+        'access callback' => true
+    );
+
+    return $items;
+}
+
+function pc_property_load($string) {
+
+}
+
+function pc_title($pc_property) {
+
+}
+
+function pc_property_page($pc_property) {
+
+}
+
+function pc_upload_form($form, &$form_state) {
+
+    pc_read_excel( __DIR__ . '/template.xlsx');
+    $form = array();
+
+    $form['upload'] = array(
+        '#title' => t('Choose property compendium file'),
+        '#type' => 'file'
+    );
+
+    $form['submit'] = array(
+        '#value' => t('Upload'),
+        '#type' => 'submit'
+    );
+
+    return $form;
+}
+
+function pc_upload_form_validate($form, &$form_state) {
+    dpm($form_state);
+}
+
+function pc_read_excel($file) {
+    $objPHPExcel = PHPExcel_IOFactory::load($file);
+
+    $sheets = $objPHPExcel->getSheetCount();
+
+    pc_process_sheet($objPHPExcel->getSheet(0));
+}
+
+function pc_process_sheet($sheet) {
+    $rowmax = $sheet->getHighestRow();
+
+    $parse = new Parse();
+
+    for ($row = 1; $row <=$rowmax; $row++) {
+        // read row of data into an array
+        $rowData = $sheet->rangeToArray(COL_START . $row . ':'. COL_END . $row,
+            NULL,
+            TRUE,
+            FALSE);
+
+        $parse->processRow($rowData[0]);
+    }
+    dpm($parse->property_name);
+}
+
+class Parse {
+
+    private $currentRowData;
+    private $state;
+
+    // States
+    const State_Title       = 'title';
+    const State_Table       = 'table';
+    const State_TableNew    = 'tablenew';
+    const State_None        = 'none';
+    const State_Graph       = 'graph';
+
+    // Events
+    const Event_GotRow          = 0x1;
+    const Event_GotEmptyRow     = 0x2;
+    const Event_GotGraphData    = 0x4;
+    const Event_GotTitle        = 0x8;
+
+    // Actions
+    function action_title() {
+        $this->property_name = $this->currentRowData[0];
+    }
+    function action_none() {
+        // todo
+    }
+    function action_table() {
+        // todo
+    }
+    function action_tablenew() {
+        // todo
+    }
+    function action_graph() {
+        // todo
+    }
+
+    // State transition table
+    // current state: events => new state
+    public static $transition_table = array(
+        self::State_Title       => array(self::Event_GotRow        => self::State_None,
+                                         self::Event_GotEmptyRow   => self::State_None),
+
+        self::State_TableNew    => array(self::Event_GotRow        => self::State_Table,
+                                         self::Event_GotEmptyRow   => self::State_None),
+
+        self::State_Table       => array(self::Event_GotRow        => self::State_Table,
+                                         self::Event_GotEmptyRow   => self::State_None),
+
+        self::State_None        => array(self::Event_GotRow        => self::State_TableNew,
+                                         self::Event_GotGraphData  => self::State_Graph,
+                                         self::Event_GotTitle      => self::State_Title,
+                                         self::Event_GotEmptyRow   => self::State_None),
+
+        self::State_Graph       => array(self::Event_GotRow        => self::State_Graph),
+    );
+
+    // Fields
+    public $property_name;
+    public $tables = array();
+    public $graph = array();
+
+
+    function __construct() {
+        $this->state = self::State_None;
+    }
+
+    function processRow($rowData) {
+        $this->currentRowData = $rowData;
+
+        // transition the state
+        $event = $this->getEvent();
+        $this->state = self::$transition_table[$this->state][$event];
+
+        // perform the action of this state
+        $this->{'action_'.$this->state}();
+    }
+
+    function getEvent() {
+
+        if ($this->property_name == null) {
+            $this->property_name = 'hello';
+            return self::Event_GotTitle;
+        }
+
+        switch(implode('', $this->currentRowData)) {
+        case 'Data for Graph':
+            return self::Event_GotGraphData;
+            break;
+        case '':
+            return self::Event_GotEmptyRow;
+            break;
+        default:
+            return self::Event_GotRow;
+            break;
+        }
+    }
+}
