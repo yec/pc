@@ -98,11 +98,11 @@ class Parse {
     const State_Graph       = 'graph';
 
     // Events
-    const Event_GotRow          = 0x1;
-    const Event_GotEmptyRow     = 0x2;
-    const Event_GotGraphData    = 0x4;
-    const Event_GotTitle        = 0x8;
-    const Event_GotTableHeading = 0x10;
+    const Event_IsRow          = 0x1;
+    const Event_IsEmptyRow     = 0x2;
+    const Event_IsGraphData    = 0x4;
+    const Event_IsTitle        = 0x8;
+    const Event_IsTableHeading = 0x10;
 
     // Actions
     function action_title() {
@@ -124,24 +124,24 @@ class Parse {
     // State transition table
     // current state: events => new state
     public static $transition_table = array(
-        self::State_Title       => array(self::Event_GotEmptyRow        => self::State_None,
-                                         self::Event_GotTableHeading    => self::State_TableNew),
+        self::State_Title       => array(self::Event_IsEmptyRow        => self::State_None,
+                                         self::Event_IsTableHeading    => self::State_TableNew),
 
-        self::State_TableNew    => array(self::Event_GotRow        => self::State_Table,
-                                         self::Event_GotEmptyRow   => self::State_Table),
+        self::State_TableNew    => array(self::Event_IsRow        => self::State_Table,
+                                         self::Event_IsEmptyRow   => self::State_Table),
 
-        self::State_Table       => array(self::Event_GotRow             => self::State_Table,
-                                         self::Event_GotTableHeading    => self::State_TableNew,
-                                         self::Event_GotGraphData       => self::State_Graph,
-                                         self::Event_GotEmptyRow        => self::State_Table),
+        self::State_Table       => array(self::Event_IsRow             => self::State_Table,
+                                         self::Event_IsTableHeading    => self::State_TableNew,
+                                         self::Event_IsGraphData       => self::State_Graph,
+                                         self::Event_IsEmptyRow        => self::State_Table),
 
-        self::State_None        => array(self::Event_GotRow             => self::State_TableNew,
-                                         self::Event_GotTableHeading    => self::State_TableNew,
-                                         self::Event_GotGraphData       => self::State_Graph,
-                                         self::Event_GotTitle           => self::State_Title,
-                                         self::Event_GotEmptyRow        => self::State_None),
+        self::State_None        => array(self::Event_IsRow             => self::State_TableNew,
+                                         self::Event_IsTableHeading    => self::State_TableNew,
+                                         self::Event_IsGraphData       => self::State_Graph,
+                                         self::Event_IsTitle           => self::State_Title,
+                                         self::Event_IsEmptyRow        => self::State_None),
 
-        self::State_Graph       => array(self::Event_GotRow        => self::State_Graph),
+        self::State_Graph       => array(self::Event_IsRow        => self::State_Graph),
     );
 
     // Fields
@@ -169,29 +169,29 @@ class Parse {
 
         if ($this->property_name == null) {
             $this->property_name = 'hello';
-            return self::Event_GotTitle;
+            return self::Event_IsTitle;
         }
 
         if ($this->currentRowData[0] !== NULL && $this->currentRowData[1] === NULL && $this->currentRowData[2] === NULL) {
             switch ($this->currentRowData[0]) {
             case 'Data for Graph':
-                return self::Event_GotGraphData;
+                return self::Event_IsGraphData;
                 break;
             default:
-                return self::Event_GotTableHeading;
+                return self::Event_IsTableHeading;
                 break;
             }
         }
 
         switch(implode('', $this->currentRowData)) {
         case 'Data for Graph':
-            return self::Event_GotGraphData;
+            return self::Event_IsGraphData;
             break;
         case '':
-            return self::Event_GotEmptyRow;
+            return self::Event_IsEmptyRow;
             break;
         default:
-            return self::Event_GotRow;
+            return self::Event_IsRow;
             break;
         }
     }
