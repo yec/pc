@@ -183,16 +183,10 @@ class Parse {
             }
         }
 
-        switch(implode('', $this->currentRowData)) {
-        case 'Data for Graph':
-            return self::Event_IsGraphData;
-            break;
-        case '':
+        if ($this->currentRowData[0] == NULL && $this->currentRowData[1] === NULL && $this->currentRowData[2] === NULL) {
             return self::Event_IsEmptyRow;
-            break;
-        default:
-            return self::Event_IsRow;
-            break;
         }
+
+        return self::Event_IsRow;
     }
 }
