@@ -119,7 +119,9 @@ class Parse {
         // todo
     }
     function action_graph() {
-        // todo
+        if ($this->currentRowData[1] > 0) {
+            $this->graph[$this->currentRowData[0]] = $this->currentRowData[1];
+        }
     }
     function action_graphnew() {
         // todo
