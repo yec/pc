@@ -40,10 +40,21 @@ function pc_property_page($pc_property) {
 
 function pc_upload_form($form, &$form_state) {
 
-    pc_read_excel( __DIR__ . '/template.xlsx');
     $form = array();
 
-    $form['upload'] = array(
+    $fid = variable_get('compendium', false);
+
+    if ($fid == false) {
+            $instruction = '<h1>Upload property compendium file. xlsx or xlsm</h1>';
+    } else {
+            $instruction = "<h1>You already have a compendium file.</h1><h1>Only upload a new file if you want to replace the current compendium file. </h1>";
+    }
+
+    $form['instruction'] = array(
+        '#markup' => $instruction
+    );
+
+    $form['compendium'] = array(
         '#title' => t('Choose property compendium file'),
         '#type' => 'file'
     );
@@ -57,7 +68,19 @@ function pc_upload_form($form, &$form_state) {
 }
 
 function pc_upload_form_validate($form, &$form_state) {
-    dpm($form_state);
+    $validators = array(
+        'file_validate_extensions' => array('xlsx xlsm')
+    );
+    $mFile = file_save_upload('compendium', $validators, 'public://');
+
+    if ($mFile == false) {
+        form_set_error('compendium', 'Need to select a file');
+    }
+}
+
+function pc_upload_form_submit($form, &$form_state) {
+    $mFile = file_save_upload('compendium');
+    variable_set('compendium', $mFile->fid);
 }
 
 function pc_read_excel($file) {
