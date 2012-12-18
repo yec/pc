@@ -9,10 +9,24 @@ require_once 'lib/PHPExcel/Classes/PHPExcel/IOFactory.php';
 function pc_menu() {
     $items['admin/property-compendium'] = array(
         'title' => 'Property compendium',
-        'description' => 'Upload and manage property compendium data',
+        'access callback' => true,
+        'description' => 'Manage property compendium',
+        'page callback' => 'pc_overview_page',
+    );
+
+    $items['admin/property-compendium/overview'] = array(
+        'title' => 'Overview',
+        'description' => 'Overview of properties',
+        'type' => MENU_DEFAULT_LOCAL_TASK
+    );
+
+    $items['admin/property-compendium/upload'] = array(
+        'title' => 'Upload',
+        'description' => 'Upload property compendium data',
         'page callback' => 'drupal_get_form',
         'page arguments' => array('pc_upload_form'),
-        'access callback' => true
+        'access callback' => true,
+        'type' => MENU_LOCAL_TASK
     );
 
     $items['property-portfolio/profiles/%pc_property'] = array(
