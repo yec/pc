@@ -242,4 +242,12 @@ class Parse {
 
         return self::Event_IsRow;
     }
+
+    // Return property data after parsing
+    public function propertyData() {
+        return array(
+            'centre_narrative' => $this->centre_narrative,
+            'graph' => $this->graph
+        );
+    }
 }
