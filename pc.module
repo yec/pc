@@ -120,6 +120,8 @@ class Parse {
     const State_None        = 'none';
     const State_GraphNew    = 'graphnew';
     const State_Graph       = 'graph';
+    const State_CentreNew   = 'centrenew';
+    const State_Centre      = 'centre';
 
     // Events
     const Event_IsRow          = 0x1;
@@ -127,6 +129,7 @@ class Parse {
     const Event_IsGraphData    = 0x4;
     const Event_IsTitle        = 0x8;
     const Event_IsTableHeading = 0x10;
+    const Event_IsCentreNew    = 0x20;
 
     // Actions
     function action_title() {
@@ -150,6 +153,14 @@ class Parse {
         // todo
     }
 
+    function action_centre() {
+        $this->centre_narrative = $this->currentRowData[0];
+    }
+
+    function action_centrenew() {
+
+    }
+
     // State transition table
     // current state: events => new state
     public static $transition_table = array(
@@ -168,16 +179,23 @@ class Parse {
                                          self::Event_IsTableHeading    => self::State_TableNew,
                                          self::Event_IsGraphData       => self::State_GraphNew,
                                          self::Event_IsTitle           => self::State_Title,
+                                         self::Event_IsCentreNew       => self::State_CentreNew,
                                          self::Event_IsEmptyRow        => self::State_None),
 
         self::State_GraphNew    => array(self::Event_IsRow        => self::State_Graph),
 
         self::State_Graph       => array(self::Event_IsRow             => self::State_Graph,
                                          self::Event_IsEmptyRow        => self::State_None),
+
+        self::State_CentreNew    => array(self::Event_IsRow           => self::State_Centre),
+
+        self::State_Centre       => array(self::Event_IsRow           => self::State_Centre,
+                                          self::Event_IsEmptyRow      => self::State_None),
     );
 
     // Fields
     public $property_name;
+    public $centre_narrative;
     public $tables = array();
     public $graph = array();
 
@@ -208,6 +226,9 @@ class Parse {
             switch ($this->currentRowData[0]) {
             case 'Data for Graph':
                 return self::Event_IsGraphData;
+                break;
+            case 'Centre Narrative':
+                return self::Event_IsCentreNew;
                 break;
             default:
                 return self::Event_IsTableHeading;
