@@ -40,6 +40,43 @@ function pc_menu() {
     return $items;
 }
 
+function pc_overview_page() {
+    $file = file_load(variable_get('compendium', false));
+
+    if ($file == false) {
+        return '<h1>You need to upload a compendium file</h1>'.l('Upload', 'admin/property-compendium/upload');
+    }
+
+    $filepath = drupal_realpath($file->uri);
+
+    $objPHPExcel = PHPExcel_IOFactory::load($filepath);
+
+    $sheets = $objPHPExcel->getSheetCount();
+
+
+    $header = array('Sheet name', 'Centre Narrative', 'Graph');
+    $rows = array();
+    for ($i = 2; $i < $sheets; $i ++) {
+        $sheet = $objPHPExcel->getSheet($i);
+        $title = $sheet->getTitle();
+        $property = pc_process_sheet($sheet);
+        $rows[] = array(
+            $title,
+            $property['centre_narrative'],
+            print_r($property['graph'], 1)
+        );
+    }
+
+    return array(
+        'sheets' => array(
+            '#theme' => 'table',
+            '#rows' => $rows,
+            '#header' => $header
+        )
+    );
+}
+
+
 function pc_property_load($string) {
 
 }
@@ -95,6 +132,7 @@ function pc_upload_form_validate($form, &$form_state) {
 function pc_upload_form_submit($form, &$form_state) {
     $mFile = file_save_upload('compendium');
     variable_set('compendium', $mFile->fid);
+    drupal_set_message("Great success. $mFile->filename uploaded.");
 }
 
 function pc_read_excel($file) {
@@ -119,7 +157,7 @@ function pc_process_sheet($sheet) {
 
         $parse->processRow($rowData[0]);
     }
-    dpm($parse->property_name);
+    return $parse->propertyData();
 }
 
 class Parse {
