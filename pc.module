@@ -41,20 +41,29 @@ function pc_menu() {
     return $items;
 }
 
-function pc_property_load($title) {
+function pc_property_load($urititle) {
 
-    $file = file_load(variable_get('compendium', false));
-    $filepath = drupal_realpath($file->uri);
-    $objPHPExcel = PHPExcel_IOFactory::load($filepath);
-    $sheet = $objPHPExcel->getSheetByName(pc_dash_to_space($title));
+    $title = pc_dash_to_space($urititle);
 
-    $data = pc_process_sheet($sheet);
+    $cacheid = md5($title);
+    $cachefile = __DIR__ . '/cache/' .$cacheid. '.json';
 
-    return (object) $data;
+    if (file_exists($cachefile)) {
+        return json_decode(file_get_contents($cachefile), 1);
+    } else {
+        $file = file_load(variable_get('compendium', false));
+        $filepath = drupal_realpath($file->uri);
+        $objPHPExcel = PHPExcel_IOFactory::load($filepath);
+        $sheet = $objPHPExcel->getSheetByName($title);
+
+        $data = pc_process_sheet($sheet);
+
+        return $data;
+    }
 }
 
 function pc_title($pc_property) {
-    return pc_dash_to_space($pc_property->title);
+    return pc_dash_to_space($pc_property['title']);
 }
 
 function pc_dash_to_space($string) {
@@ -193,18 +202,30 @@ function pc_read_excel($file) {
 }
 
 function pc_process_sheet($sheet) {
-    $rowmax = $sheet->getHighestRow();
+    $cacheid = md5($sheet->getTitle());
+    $cachefile = __DIR__ . '/cache/' .$cacheid. '.json';
 
-    $parse = new Parse();
+    if (file_exists($cachefile)) {
+        return json_decode(file_get_contents($cachefile), true);
+    } else {
+        $rowmax = $sheet->getHighestRow();
 
-    for ($row = 1; $row <=$rowmax; $row++) {
-        // read row of data into an array
-        $rowData = $sheet->rangeToArray(COL_START . $row . ':'. COL_END . $row,
-            NULL,
-            TRUE,
-            FALSE);
+        $parse = new Parse();
 
-        $parse->processRow($rowData[0]);
+        $title = $sheet->getTitle();
+
+        for ($row = 1; $row <=$rowmax; $row++) {
+            // read row of data into an array
+            $loc = COL_START . $row . ':'. COL_END . $row;
+
+            $rowData = $sheet->rangeToArray($loc,
+                NULL,
+                TRUE,
+                FALSE);
+
+            $parse->processRow($rowData[0]);
+        }
+        file_put_contents($cachefile, json_encode($parse->propertyData()));
+        return $parse->propertyData();
     }
-    return $parse->propertyData();
 }
