@@ -114,11 +114,6 @@ EOT;
 
 }
 
-function pc_delete_cache() {
-    $cachefiles = glob( __DIR__ . '/cache/*');
-    array_map('unlink', $cachefiles);
-}
-
 function pc_process_sheet($sheet) {
     $cacheid = md5($sheet->getTitle());
     $cachefile = __DIR__ . '/cache/' .$cacheid. '.json';
@@ -186,4 +181,9 @@ function pc_cache_file($urititle) {
     $title = pc_title_from_urititle($urititle);
     $filename = md5($title).'.json';
     return pc_cache_dirpath()."/$filename";
+}
+
+function pc_delete_cache() {
+    $cachefiles = glob( __DIR__ . '/cache/*');
+    array_map('unlink', $cachefiles);
 }
