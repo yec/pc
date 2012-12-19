@@ -72,16 +72,17 @@ function pc_dash_to_space($string) {
 
 function pc_property_page($pc_property) {
 
-    return array(
-        '#theme' => 'pie',
-        '#piedata' => pc_piedata_from_graphdata($pc_property->graphdata)
-    );
+    return theme('profile', array());
 }
 
 function pc_theme() {
     return array(
         'pie' => array(
             'variables' => array('piedata' => array())
+        ),
+        'profile' => array(
+            'variables' => array(),
+            'template' => 'property'
         )
     );
 }
