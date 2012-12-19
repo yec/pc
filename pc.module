@@ -189,6 +189,6 @@ function pc_cache_file($urititle) {
 }
 
 function pc_delete_cache() {
-    $cachefiles = glob( __DIR__ . '/cache/*');
+    $cachefiles = glob( pc_cache_dirpath() . '/*');
     array_map('unlink', $cachefiles);
 }
