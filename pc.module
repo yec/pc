@@ -215,7 +215,8 @@ function pc_upload_form_submit($form, &$form_state) {
 }
 
 function pc_delete_cache() {
-
+    $cachefiles = glob( __DIR__ . '/cache/*');
+    array_map('unlink', $cachefiles);
 }
 
 function pc_read_excel($file) {
