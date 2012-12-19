@@ -119,14 +119,6 @@ function pc_delete_cache() {
     array_map('unlink', $cachefiles);
 }
 
-function pc_read_excel($file) {
-    $objPHPExcel = PHPExcel_IOFactory::load($file);
-
-    $sheets = $objPHPExcel->getSheetCount();
-
-    pc_process_sheet($objPHPExcel->getSheet(0));
-}
-
 function pc_process_sheet($sheet) {
     $cacheid = md5($sheet->getTitle());
     $cachefile = __DIR__ . '/cache/' .$cacheid. '.json';
