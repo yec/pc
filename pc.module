@@ -4,6 +4,8 @@ define('COL_START'      , 'B');      // The first significant column in xlsx
 define('COL_END'        , 'D');      // The last column in xlsx
 define('COL_VISIBILITY' , 'I');      // The column that toggles visibility in xlsx
 
+define('PC_CACHE_DIRNAME' , 'pccache');
+
 require_once 'lib/PHPExcel/Classes/PHPExcel/IOFactory.php';
 require_once 'lib/Parse.php';
 
@@ -180,4 +182,16 @@ function pc_piedata_from_graphdata($graphdata) {
         'values' => array_values($graphdata),
         'legend' => array_keys($graphdata),
     );
+}
+
+function pc_cache_dirpath() {
+    $dir = drupal_realpath('public://'. PC_CACHE_DIRNAME);
+    file_prepare_directory($dir, FILE_MODIFY_PERMISSIONS | FILE_CREATE_DIRECTORY );
+    return $dir;
+}
+
+function pc_cache_file($urititle) {
+    $title = pc_title_from_urititle($urititle);
+    $filename = md5($title).'.json';
+    return pc_cache_dirpath()."/$filename";
 }
