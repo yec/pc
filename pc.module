@@ -78,7 +78,7 @@ function pc_property_page($pc_property) {
 
     return array(
         '#theme' => 'profile',
-        '#tables' => implode('',$rtables),
+        '#tables' => implode('<br>',$rtables),
         '#title' => $pc_property['title'],
         '#centre_narrative' => $pc_property['centre_narrative'],
         '#chart' => theme('pie', array('piedata' => pc_piedata_from_graphdata($pc_property['graphdata'])))
@@ -111,7 +111,7 @@ function theme_pie($variables) {
     $piedata = json_encode($variables['piedata']);
 
     return <<<EOT
-<div id='pie$id'></div>
+<div class='piechart' id='pie$id'></div>
 <script>
 var piedata$id = $piedata;
 drawPie(piedata$id, '#pie$id');
