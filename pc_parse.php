@@ -32,7 +32,10 @@ class Parse {
         // todo
     }
     function action_table() {
-        if (implode('', $this->currentRowData) != '') {
+        if (implode('', $this->currentRowData) != ''
+            && $this->currentRowData[1] != '0'
+            && $this->currentRowData[2] != '0'
+        ) {
             $this->tables[$this->currentTable][] = $this->currentRowData;
         }
     }

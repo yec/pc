@@ -9,12 +9,16 @@
         <div id="content-col2" >
 
 <div class="centretitle"><?php print $title ?></div>
-<img src="" alt="" width="442px" height="240px">
+<img src="http://lorempixel.com/442/240/city" alt="" width="442px" height="240px">
 <div class="overview">
 <strong>Overview</strong>
 <p>
 <?php print $centre_narrative; ?>
 </p>
+
+</div>
+<div class="propertytables">
+<?php print_r($tables); ?>
 </div>
         </div>
         <!-- // Col 2 -->

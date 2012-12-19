@@ -72,8 +72,13 @@ function pc_dash_to_space($string) {
 
 function pc_property_page($pc_property) {
 
+    foreach($pc_property['tables'] as $table => $rows) {
+        $rtables[] = theme('table', array('header' => array(array('data' => $table, 'colspan' => 3)),'rows' => $rows));
+    }
+
     return array(
         '#theme' => 'profile',
+        '#tables' => implode('',$rtables),
         '#title' => $pc_property['title'],
         '#centre_narrative' => $pc_property['centre_narrative'],
         '#chart' => theme('pie', array('piedata' => pc_piedata_from_graphdata($pc_property['graphdata'])))
@@ -86,7 +91,12 @@ function pc_theme() {
             'variables' => array('piedata' => array())
         ),
         'profile' => array(
-            'variables' => array('title' => NULL, 'chart' => NULL, 'centre_narrative' => NULL),
+            'variables' => array(
+                'tables' => NULL
+                , 'title' => NULL
+                , 'chart' => NULL
+                , 'centre_narrative' => NULL
+            ),
             'template' => 'property'
         )
     );
@@ -200,7 +210,12 @@ function pc_upload_form_validate($form, &$form_state) {
 function pc_upload_form_submit($form, &$form_state) {
     $mFile = file_save_upload('compendium');
     variable_set('compendium', $mFile->fid);
+    pc_delete_cache();
     drupal_set_message("Great success. $mFile->filename uploaded.");
+}
+
+function pc_delete_cache() {
+
 }
 
 function pc_read_excel($file) {
@@ -231,7 +246,7 @@ function pc_process_sheet($sheet) {
             $rowData = $sheet->rangeToArray($loc,
                 NULL,
                 TRUE,
-                FALSE);
+                TRUE);
 
             $parse->processRow($rowData[0]);
         }
