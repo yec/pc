@@ -1,5 +1,8 @@
 <?php
 
+require_once 'lib/PHPExcel/Classes/PHPExcel/IOFactory.php';
+require_once 'pc_parse.php';
+
 function pc_overview_page() {
     $file = file_load(variable_get('compendium', false));
 
@@ -82,3 +85,5 @@ function pc_upload_form_submit($form, &$form_state) {
     pc_delete_cache();
     drupal_set_message("Great success. $mFile->filename uploaded.");
 }
+
+// vim: set expandtab tabstop=4 shiftwidth=4 autoindent:
