@@ -69,10 +69,6 @@ function pc_property_load($urititle) {
     }
 }
 
-function pc_title($pc_property) {
-    return $pc_property['title'];
-}
-
 /**
  * hook_theme
  */
@@ -164,6 +160,9 @@ function pc_process_sheet($sheet) {
 /**
  * Callbacks
  */
+function pc_title($pc_property) {
+    return $pc_property['title'];
+}
 
 /**
  * Helpers
