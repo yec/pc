@@ -1,7 +1,8 @@
 var drawPie = function(dataset, element) {
     var width = 132,
-        height = 320,
-        radius = Math.min(width, height) / 2;
+        radius = width / 2;
+
+    var height = 18 * dataset.values.length + 2 * radius + 20;
 
     var colorfn = function(i) {
 
