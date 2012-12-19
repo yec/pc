@@ -41,6 +41,39 @@ function pc_menu() {
     return $items;
 }
 
+function pc_theme() {
+    return array(
+        'pie' => array(
+            'variables' => array('graphdata' => array())
+        )
+    );
+}
+
+function theme_pie($variables) {
+
+    drupal_add_js( drupal_get_path('module', 'pc') . '/lib/d3/d3.v2.js');
+    drupal_add_js( drupal_get_path('module', 'pc') . '/js/pie.js', array('weight' => 99));
+    $id = rand();
+
+    $piedata = json_encode(pc_piedata_from_graphdata($variables['graphdata']));
+
+    return <<<EOT
+<div id='pie$id'></div>
+<script>
+var piedata$id = $piedata;
+drawPie(piedata$id, '#pie$id');
+</script>
+EOT;
+
+}
+
+function pc_piedata_from_graphdata($graphdata) {
+    return array(
+        'values' => array_values($graphdata),
+        'legend' => array_keys($graphdata),
+    );
+}
+
 function pc_overview_page() {
     $file = file_load(variable_get('compendium', false));
 
@@ -64,7 +97,7 @@ function pc_overview_page() {
         $rows[] = array(
             $title,
             $property['centre_narrative'],
-            print_r($property['graph'], 1)
+            theme('pie', array('graphdata' => $property['graph']))
         );
     }
 
