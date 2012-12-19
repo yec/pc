@@ -38,6 +38,7 @@ function pc_menu() {
         'title arguments' => array(2),
         'page callback' => 'pc_property_page',
         'page arguments' => array(2),
+        'file' => 'pc.pages.inc',
         'access callback' => true
     );
 
