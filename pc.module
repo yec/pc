@@ -47,7 +47,7 @@ function pc_menu() {
 
 function pc_property_load($urititle) {
 
-    $title = pc_dash_to_space($urititle);
+    $title = pc_title_from_urititle($urititle);
 
     $cacheid = md5($title);
     $cachefile = __DIR__ . '/cache/' .$cacheid. '.json';
@@ -67,11 +67,7 @@ function pc_property_load($urititle) {
 }
 
 function pc_title($pc_property) {
-    return pc_dash_to_space($pc_property['title']);
-}
-
-function pc_dash_to_space($string) {
-    return str_replace('-', ' ', $string);
+    return pc_title_from_urititle($pc_property['title']);
 }
 
 function pc_theme() {
@@ -107,13 +103,6 @@ drawPie(piedata$id, '#pie$id');
 </script>
 EOT;
 
-}
-
-function pc_piedata_from_graphdata($graphdata) {
-    return array(
-        'values' => array_values($graphdata),
-        'legend' => array_keys($graphdata),
-    );
 }
 
 function pc_delete_cache() {
@@ -159,4 +148,23 @@ function pc_process_sheet($sheet) {
         file_put_contents($cachefile, json_encode($data));
         return $data;
     }
+}
+
+/**
+ * Helper functions
+ */
+
+function pc_title_from_urititle($urititle) {
+    return str_replace('-', ' ', $urititle);
+}
+
+function pc_urititle_from_title($title) {
+    return str_replace(' ', '-', $title);
+}
+
+function pc_piedata_from_graphdata($graphdata) {
+    return array(
+        'values' => array_values($graphdata),
+        'legend' => array_keys($graphdata),
+    );
 }
