@@ -41,6 +41,34 @@ function pc_menu() {
     return $items;
 }
 
+function pc_property_load($title) {
+
+    $file = file_load(variable_get('compendium', false));
+    $filepath = drupal_realpath($file->uri);
+    $objPHPExcel = PHPExcel_IOFactory::load($filepath);
+    $sheet = $objPHPExcel->getSheetByName(pc_dash_to_space($title));
+
+    $data = pc_process_sheet($sheet);
+
+    return (object) $data;
+}
+
+function pc_title($pc_property) {
+    return pc_dash_to_space($pc_property->title);
+}
+
+function pc_dash_to_space($string) {
+    return str_replace('-', ' ', $string);
+}
+
+function pc_property_page($pc_property) {
+
+    return array(
+        '#theme' => 'pie',
+        '#piedata' => pc_piedata_from_graphdata($pc_property->graphdata)
+    );
+}
+
 function pc_theme() {
     return array(
         'pie' => array(
@@ -108,19 +136,6 @@ function pc_overview_page() {
             '#header' => $header
         )
     );
-}
-
-
-function pc_property_load($string) {
-
-}
-
-function pc_title($pc_property) {
-
-}
-
-function pc_property_page($pc_property) {
-
 }
 
 function pc_upload_form($form, &$form_state) {
