@@ -72,7 +72,12 @@ function pc_dash_to_space($string) {
 
 function pc_property_page($pc_property) {
 
-    return theme('profile', array());
+    return array(
+        '#theme' => 'profile',
+        '#title' => $pc_property['title'],
+        '#centre_narrative' => $pc_property['centre_narrative'],
+        '#chart' => theme('pie', array('piedata' => pc_piedata_from_graphdata($pc_property['graphdata'])))
+    );
 }
 
 function pc_theme() {
@@ -81,7 +86,7 @@ function pc_theme() {
             'variables' => array('piedata' => array())
         ),
         'profile' => array(
-            'variables' => array(),
+            'variables' => array('title' => NULL, 'chart' => NULL, 'centre_narrative' => NULL),
             'template' => 'property'
         )
     );
@@ -146,6 +151,10 @@ function pc_overview_page() {
             '#header' => $header
         )
     );
+}
+
+function pc_process_page($variables) {
+    //dpm($variables);
 }
 
 function pc_upload_form($form, &$form_state) {
@@ -226,7 +235,10 @@ function pc_process_sheet($sheet) {
 
             $parse->processRow($rowData[0]);
         }
-        file_put_contents($cachefile, json_encode($parse->propertyData()));
-        return $parse->propertyData();
+        $data = $parse->propertyData();
+        $data['title'] = $sheet->getTitle();
+
+        file_put_contents($cachefile, json_encode($data));
+        return $data;
     }
 }
