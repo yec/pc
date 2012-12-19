@@ -1,8 +1,5 @@
 <?php
 
-require_once 'lib/PHPExcel/Classes/PHPExcel/IOFactory.php';
-require_once 'pc_parse.php';
-
 function pc_overview_page() {
     $file = file_load(variable_get('compendium', false));
 
