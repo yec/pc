@@ -4,6 +4,7 @@ class Parse {
 
     private $currentRowData;
     private $state;
+    private $currentTable;
 
     // States
     const State_Title       = 'title';
@@ -31,10 +32,12 @@ class Parse {
         // todo
     }
     function action_table() {
-        // todo
+        if (implode('', $this->currentRowData) != '') {
+            $this->tables[$this->currentTable][] = $this->currentRowData;
+        }
     }
     function action_tablenew() {
-        // todo
+        $this->currentTable = $this->currentRowData[0];
     }
     function action_graph() {
         if ($this->currentRowData[1] > 0) {
@@ -139,7 +142,8 @@ class Parse {
     public function propertyData() {
         return array(
             'centre_narrative' => $this->centre_narrative,
-            'graphdata' => $this->graph
+            'graphdata' => $this->graph,
+            'tables' => $this->tables
         );
     }
 }
