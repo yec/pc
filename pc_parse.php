@@ -139,7 +139,7 @@ class Parse {
     public function propertyData() {
         return array(
             'centre_narrative' => $this->centre_narrative,
-            'graph' => $this->graph
+            'graphdata' => $this->graph
         );
     }
 }

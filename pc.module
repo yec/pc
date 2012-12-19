@@ -44,7 +44,7 @@ function pc_menu() {
 function pc_theme() {
     return array(
         'pie' => array(
-            'variables' => array('graphdata' => array())
+            'variables' => array('piedata' => array())
         )
     );
 }
@@ -55,7 +55,7 @@ function theme_pie($variables) {
     drupal_add_js( drupal_get_path('module', 'pc') . '/js/pie.js', array('weight' => 99));
     $id = rand();
 
-    $piedata = json_encode(pc_piedata_from_graphdata($variables['graphdata']));
+    $piedata = json_encode($variables['piedata']);
 
     return <<<EOT
 <div id='pie$id'></div>
@@ -97,7 +97,7 @@ function pc_overview_page() {
         $rows[] = array(
             $title,
             $property['centre_narrative'],
-            theme('pie', array('graphdata' => $property['graph']))
+            theme('pie', array('piedata' => pc_piedata_from_graphdata($property['graphdata'])))
         );
     }
 
