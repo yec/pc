@@ -14,7 +14,7 @@ function pc_overview_page() {
     $sheets = $objPHPExcel->getSheetCount();
 
 
-    $header = array('Sheet name', 'Centre Narrative', 'Graph');
+    $header = array('Property', 'Centre Narrative', 'Chart');
     $rows = array();
     for ($i = 2; $i < $sheets; $i ++) {
         $sheet = $objPHPExcel->getSheet($i);
