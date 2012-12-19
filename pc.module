@@ -156,6 +156,11 @@ function pc_title($pc_property) {
 /**
  * Helpers
  */
+
+/**
+ * function is idepotent so can call repeatedly on urititle and
+ * title without any issues.
+ */
 function pc_title_from_urititle($urititle) {
     return str_replace('-', ' ', $urititle);
 }
