@@ -2,7 +2,7 @@
 
 define('COL_START'      , 'B');      // The first significant column in xlsx
 define('COL_END'        , 'D');      // The last column in xlsx
-define('COL_VISIBILITY' , 'I'); // The column that toggles visibility in xlsx
+define('COL_VISIBILITY' , 'I');      // The column that toggles visibility in xlsx
 
 require_once 'lib/PHPExcel/Classes/PHPExcel/IOFactory.php';
 require_once 'lib/Parse.php';
@@ -45,6 +45,9 @@ function pc_menu() {
     return $items;
 }
 
+/**
+ * hook_load
+ */
 function pc_property_load($urititle) {
 
     $title = pc_title_from_urititle($urititle);
@@ -70,6 +73,9 @@ function pc_title($pc_property) {
     return $pc_property['title'];
 }
 
+/**
+ * hook_theme
+ */
 function pc_theme() {
     return array(
         'pie' => array(
@@ -87,6 +93,11 @@ function pc_theme() {
     );
 }
 
+/**
+ * pie theme function
+ * Creates a pie chart
+ * theme('pie', array('values' => array(), 'legend' => array()));
+ */
 function theme_pie($variables) {
 
     drupal_add_js( drupal_get_path('module', 'pc') . '/lib/d3/d3.v2.js');
@@ -151,9 +162,12 @@ function pc_process_sheet($sheet) {
 }
 
 /**
- * Helper functions
+ * Callbacks
  */
 
+/**
+ * Helpers
+ */
 function pc_title_from_urititle($urititle) {
     return str_replace('-', ' ', $urititle);
 }
