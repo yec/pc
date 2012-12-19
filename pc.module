@@ -13,11 +13,13 @@ function pc_menu() {
         'access callback' => true,
         'description' => 'Manage property compendium',
         'page callback' => 'pc_overview_page',
+        'file' => 'pc_admin.inc',
     );
 
     $items['admin/property-compendium/overview'] = array(
         'title' => 'Overview',
         'description' => 'Overview of properties',
+        'file' => 'pc_admin.inc',
         'type' => MENU_DEFAULT_LOCAL_TASK
     );
 
@@ -27,6 +29,7 @@ function pc_menu() {
         'page callback' => 'drupal_get_form',
         'page arguments' => array('pc_upload_form'),
         'access callback' => true,
+        'file' => 'pc_admin.inc',
         'type' => MENU_LOCAL_TASK
     );
 
