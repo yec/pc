@@ -44,6 +44,48 @@ function pc_menu() {
         'access callback' => true
     );
 
+    $items['property-portfolio/overview/summary'] = array(
+        'title' => 'Portfolio Overview',
+        'page callback' => 'pc_overview_summary',
+        'file' => 'pc.pages.inc',
+        'access callback' => true
+    );
+
+    $items['property-portfolio/overview/portfolio-geographical-diversification'] = array(
+        'title' => 'Portfolio Geographical Diversification',
+        'page callback' => 'pc_pgd',
+        'file' => 'pc.pages.inc',
+        'access callback' => true
+    );
+
+    $items['property-portfolio/overview/joint-venture-partners'] = array(
+        'title' => 'Joint Venture Partners',
+        'page callback' => 'pc_jvp',
+        'file' => 'pc.pages.inc',
+        'access callback' => true
+    );
+
+    $items['property-portfolio/overview/lease-expiry-profile'] = array(
+        'title' => 'Lease Expiry Profile',
+        'page callback' => 'pc_lep',
+        'file' => 'pc.pages.inc',
+        'access callback' => true
+    );
+
+    $items['property-portfolio/overview/australia'] = array(
+        'title' => 'Australia',
+        'page callback' => 'pc_australia',
+        'file' => 'pc.pages.inc',
+        'access callback' => true
+    );
+
+    $items['property-portfolio/overview/new-zealand'] = array(
+        'title' => 'New Zealand',
+        'page callback' => 'pc_nz',
+        'file' => 'pc.pages.inc',
+        'access callback' => true
+    );
+
     return $items;
 }
 

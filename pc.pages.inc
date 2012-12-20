@@ -15,4 +15,28 @@ function pc_property_page($pc_property) {
     );
 }
 
+function pc_nz() {
+    // todo
+}
+
+function pc_australia() {
+    // todo
+}
+
+function pc_lep() {
+    // todo
+}
+
+function pc_jvp() {
+    // todo
+}
+
+function pc_pgd() {
+    // todo
+}
+
+function pc_overview_summary() {
+    // todo
+}
+
 // vim: set expandtab tabstop=4 shiftwidth=4 autoindent:
