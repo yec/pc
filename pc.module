@@ -359,3 +359,18 @@ function pc_fullstate($stateabbr) {
 
     return $states[$stateabbr];
 }
+
+function pc_excel_range($range) {
+
+    $file = file_load(variable_get('compendium', false));
+    $filepath = drupal_realpath($file->uri);
+    $objPHPExcel = PHPExcel_IOFactory::load($filepath);
+    $sheet = $objPHPExcel->getSheet(PC_OVERVIEW_SHEET);
+
+    $rows = $sheet->rangeToArray($range,
+        NULL,
+        TRUE,
+        FALSE);
+
+    return $rows;
+}
