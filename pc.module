@@ -185,7 +185,7 @@ function pc_theme() {
 /**
  * pie theme function
  * Creates a pie chart
- * theme('pie', array('values' => array(), 'legend' => array()));
+ * theme('pie', array('piedata' => array('values' => array(), 'legend' => array())));
  */
 function theme_pie($variables) {
 
