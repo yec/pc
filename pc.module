@@ -19,6 +19,9 @@ define('PC_EXCEL_NET_OPERATING_INCOME' , 'j82:k88');
 define('PC_EXCEL_JV' , 'c109:d110');
 define('PC_EXCEL_JVM' , 'g109:k120');
 
+define('PC_EXCEL_AUS' , 'c4:k58');
+define('PC_EXCEL_NZ' , 'c62:k76');
+
 require_once 'lib/PHPExcel/Classes/PHPExcel/IOFactory.php';
 require_once 'lib/Parse.php';
 
@@ -363,7 +366,7 @@ function pc_fullstate($stateabbr) {
     return $states[$stateabbr];
 }
 
-function pc_excel_range($range) {
+function pc_excel_range($range, $format = false) {
 
     $file = file_load(variable_get('compendium', false));
     $filepath = drupal_realpath($file->uri);
@@ -373,7 +376,7 @@ function pc_excel_range($range) {
     $rows = $sheet->rangeToArray($range,
         NULL,
         TRUE,
-        FALSE);
+        $format);
 
     return $rows;
 }

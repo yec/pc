@@ -16,11 +16,32 @@ function pc_property_page($pc_property) {
 }
 
 function pc_nz() {
-    // todo
+    return pc_region_overview(PC_EXCEL_NZ, 'New Zealand');
 }
 
 function pc_australia() {
-    // todo
+    return pc_region_overview(PC_EXCEL_AUS, 'Australia');
+}
+
+// This function render Australia and New Zealand Overview
+function pc_region_overview($range, $title) {
+    $render = array();
+    $format = true;
+    $rows = pc_excel_range($range, $format);
+    $render[] = array(
+        '#prefix' => '<div class="portfolio">',
+        '#suffix' => '</div>',
+        array(
+            '#type' => 'markup',
+            '#markup' => "<div>Portfolio Overview – $title</div>"
+        ),
+        array(
+            '#theme' => 'table',
+            '#header' => array_shift($rows),
+            '#rows' => $rows
+        )
+    );
+    return $render;
 }
 
 function pc_lep() {
