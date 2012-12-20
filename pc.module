@@ -352,7 +352,7 @@ function pc_pgd_data() {
     );
 }
 
-function pc_fullstate($stateabbr) {
+function pc_fullstate_from_short($stateabbr) {
     $states = array(
         'NSW' => 'New South Wales',
         'VIC' => 'Victoria',

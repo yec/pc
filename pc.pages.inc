@@ -96,7 +96,7 @@ function pc_pgd() {
         $piedata['values'] = array();
 
         foreach($chartdata as $pair) {
-            $piedata['legend'][] = pc_fullstate($pair[0]);
+            $piedata['legend'][] = pc_fullstate_from_short($pair[0]);
             $piedata['values'][] = $pair[1];
         }
 
