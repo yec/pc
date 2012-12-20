@@ -32,7 +32,12 @@ function pc_jvp() {
 }
 
 function pc_pgd() {
-    $charts = array();
+    $render = array();
+
+    $render[] = array(
+        '#type' => 'markup',
+        '#markup' => '<div class="portfolioheading">Portfolio Geographical Diversification</div>'
+    );
     foreach(pc_pgd_data() as $title => $chartdata) {
 
         $piedata = array();
@@ -47,7 +52,7 @@ function pc_pgd() {
             //array('#prefix' =>,'<div class="col3">'),
             //array('#suffix' => '</div>'),
 
-        $charts[] = array(
+        $render[] = array(
             '#prefix' => '<div class="col3">',
             '#suffix' => '</div>',
             array(
@@ -63,7 +68,7 @@ function pc_pgd() {
         );
     }
 
-    return $charts;
+    return $render;
 }
 
 function pc_overview_summary() {

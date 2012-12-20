@@ -23,6 +23,7 @@ $css = <<<EOT
 .portfolio table {
     width: 100%;
 }
+.portfolioheading,
 .portfolio table th {
     background-color: black;
     color: white;
@@ -53,6 +54,7 @@ $css = <<<EOT
     width:227px;
     float:left;
     margin-right:5px;
+    margin-top:10px;
 }
 EOT;
 
