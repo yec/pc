@@ -12,6 +12,10 @@ define('PC_OVERVIEW_SHEET' , 1);
 define('PC_EXCEL_SUMMARY', 'c98:f104');
 define('PC_EXCEL_PERIOD',  'd6');
 
+define('PC_EXCEL_GROSS_LETTABLE_AREA'  , 'd82:e88');
+define('PC_EXCEL_ASSET_VALUE'          , 'g82:h88');
+define('PC_EXCEL_NET_OPERATING_INCOME' , 'j82:k88');
+
 require_once 'lib/PHPExcel/Classes/PHPExcel/IOFactory.php';
 require_once 'lib/Parse.php';
 
@@ -43,6 +47,12 @@ $css = <<<EOT
 
 .piechart {
     margin-top:10px;
+}
+
+.col3 {
+    width:227px;
+    float:left;
+    margin-right:5px;
 }
 EOT;
 
@@ -303,4 +313,47 @@ function pc_render_array_from_summary_data($summary_data) {
             '#suffix' => '</div>',
         )
     );
+}
+
+function pc_pgd_data() {
+
+    $file = file_load(variable_get('compendium', false));
+    $filepath = drupal_realpath($file->uri);
+    $objPHPExcel = PHPExcel_IOFactory::load($filepath);
+    $sheet = $objPHPExcel->getSheet(PC_OVERVIEW_SHEET);
+
+    $gla = $sheet->rangeToArray(PC_EXCEL_GROSS_LETTABLE_AREA,
+        NULL,
+        TRUE,
+        FALSE);
+
+    $av = $sheet->rangeToArray(PC_EXCEL_ASSET_VALUE,
+        NULL,
+        TRUE,
+        FALSE);
+
+    $nop = $sheet->rangeToArray(PC_EXCEL_NET_OPERATING_INCOME,
+        NULL,
+        TRUE,
+        FALSE);
+
+    return array(
+        'Gross Lettable Area' => $gla,
+        'Asset Value' => $av,
+        'Net Operating Income' => $nop
+    );
+}
+
+function pc_fullstate($stateabbr) {
+    $states = array(
+        'NSW' => 'New South Wales',
+        'VIC' => 'Victoria',
+        'QLD' => 'Queensland',
+        'SA' => 'South Australia',
+        'WA' => 'Western Australia',
+        'ACT' => 'Australian Capital Territory',
+        'NZ' => 'New Zealand'
+    );
+
+    return $states[$stateabbr];
 }

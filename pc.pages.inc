@@ -32,7 +32,38 @@ function pc_jvp() {
 }
 
 function pc_pgd() {
-    // todo
+    $charts = array();
+    foreach(pc_pgd_data() as $title => $chartdata) {
+
+        $piedata = array();
+        $piedata['legend'] = array();
+        $piedata['values'] = array();
+
+        foreach($chartdata as $pair) {
+            $piedata['legend'][] = pc_fullstate($pair[0]);
+            $piedata['values'][] = $pair[1];
+        }
+
+            //array('#prefix' =>,'<div class="col3">'),
+            //array('#suffix' => '</div>'),
+
+        $charts[] = array(
+            '#prefix' => '<div class="col3">',
+            '#suffix' => '</div>',
+            array(
+                '#type' => 'markup',
+                '#prefix' => '<div class="charttitle">',
+                '#suffix' => '</div>',
+                '#markup' => 'By '.$title
+            ),
+            array(
+                '#theme' => 'pie',
+                '#piedata' => $piedata
+            )
+        );
+    }
+
+    return $charts;
 }
 
 function pc_overview_summary() {
