@@ -1,14 +1,8 @@
 <?php
-
-define('COL_START'      , 'B');      // The first significant column in xlsx
-define('COL_END'        , 'D');      // The last column in xlsx
-define('COL_VISIBILITY' , 'I');      // The column that toggles visibility in xlsx
-
-define('PC_CACHE_DIRNAME' , 'pccache');
-
-define('PC_CONTROL_SHEET'  , 0);
-define('PC_OVERVIEW_SHEET' , 1);
-
+/**
+ * These defines may need to be updated when a new excel file is uploaded
+ * adding an additional row pushes out all the references
+ */
 define('PC_EXCEL_SUMMARY' , 'c98:f104');
 define('PC_EXCEL_PERIOD'  , 'd6');
 
@@ -21,6 +15,19 @@ define('PC_EXCEL_JVM' , 'g109:k120');
 
 define('PC_EXCEL_AUS' , 'c4:k58');
 define('PC_EXCEL_NZ'  , 'c62:k76');
+
+define('PC_CONTROL_SHEET'  , 0);
+define('PC_OVERVIEW_SHEET' , 1);
+
+/**
+ * Property parsing is flexible in the number of rows per table
+ * it's shouldn't be neccessary to update the following defines
+ */
+define('COL_START'      , 'B');      // The first significant column in xlsx
+define('COL_END'        , 'D');      // The last column in xlsx
+define('COL_VISIBILITY' , 'I');      // The column that toggles visibility in xlsx
+
+define('PC_CACHE_DIRNAME' , 'pccache');
 
 require_once 'lib/PHPExcel/Classes/PHPExcel/IOFactory.php';
 require_once 'lib/Parse.php';
