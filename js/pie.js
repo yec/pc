@@ -33,7 +33,7 @@ var drawPie = function(dataset, element) {
         .outerRadius(radius - 4.5);
 
     var svg = d3.select(element).append("svg")
-        .attr("width", width)
+        .attr("width", 227)
         .attr("height", height)
         .append("g")
         .attr("transform", "translate(" + width / 2 + "," + width / 2 + ")");
