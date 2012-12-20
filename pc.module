@@ -9,18 +9,18 @@ define('PC_CACHE_DIRNAME' , 'pccache');
 define('PC_CONTROL_SHEET'  , 0);
 define('PC_OVERVIEW_SHEET' , 1);
 
-define('PC_EXCEL_SUMMARY', 'c98:f104');
-define('PC_EXCEL_PERIOD',  'd6');
+define('PC_EXCEL_SUMMARY' , 'c98:f104');
+define('PC_EXCEL_PERIOD'  , 'd6');
 
 define('PC_EXCEL_GROSS_LETTABLE_AREA'  , 'd82:e88');
 define('PC_EXCEL_ASSET_VALUE'          , 'g82:h88');
 define('PC_EXCEL_NET_OPERATING_INCOME' , 'j82:k88');
 
-define('PC_EXCEL_JV' , 'c109:d110');
+define('PC_EXCEL_JV'  , 'c109:d110');
 define('PC_EXCEL_JVM' , 'g109:k120');
 
 define('PC_EXCEL_AUS' , 'c4:k58');
-define('PC_EXCEL_NZ' , 'c62:k76');
+define('PC_EXCEL_NZ'  , 'c62:k76');
 
 require_once 'lib/PHPExcel/Classes/PHPExcel/IOFactory.php';
 require_once 'lib/Parse.php';
