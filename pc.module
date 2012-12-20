@@ -6,6 +6,12 @@ define('COL_VISIBILITY' , 'I');      // The column that toggles visibility in xl
 
 define('PC_CACHE_DIRNAME' , 'pccache');
 
+define('PC_CONTROL_SHEET'  , 0);
+define('PC_OVERVIEW_SHEET' , 1);
+
+define('PC_EXCEL_SUMMARY', 'c98:f104');
+define('PC_EXCEL_PERIOD',  'd6');
+
 require_once 'lib/PHPExcel/Classes/PHPExcel/IOFactory.php';
 require_once 'lib/Parse.php';
 
@@ -259,4 +265,42 @@ function pc_cache_file($urititle) {
 function pc_delete_cache() {
     $cachefiles = glob( pc_cache_dirpath() . '/*');
     array_map('unlink', $cachefiles);
+}
+
+function pc_summary_data() {
+    $file = file_load(variable_get('compendium', false));
+    $filepath = drupal_realpath($file->uri);
+    $objPHPExcel = PHPExcel_IOFactory::load($filepath);
+    $sheet = $objPHPExcel->getSheet(PC_OVERVIEW_SHEET);
+
+    $rows = $sheet->rangeToArray(PC_EXCEL_SUMMARY,
+        NULL,
+        TRUE,
+        TRUE);
+
+    $sheet = $objPHPExcel->getSheet(PC_CONTROL_SHEET);
+
+    $period = $sheet->rangeToArray(PC_EXCEL_PERIOD,
+        NULL,
+        TRUE,
+        TRUE);
+
+    return array(
+        'rows' => $rows
+        , 'period' => $period[0][0]
+    );
+}
+
+function pc_render_array_from_summary_data($summary_data) {
+    $header = array('At '.$summary_data['period'], 'Australia', 'New Zealand', 'Total');
+
+    return array(
+        'table' => array(
+            '#theme' => 'table',
+            '#header' => $header,
+            '#rows' => $summary_data['rows'],
+            '#prefix' => '<div class="portfolio">',
+            '#suffix' => '</div>',
+        )
+    );
 }

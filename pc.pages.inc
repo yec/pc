@@ -36,7 +36,9 @@ function pc_pgd() {
 }
 
 function pc_overview_summary() {
-    // todo
+    $summary_data = pc_summary_data();
+    $render_array = pc_render_array_from_summary_data($summary_data);
+    return $render_array;
 }
 
 // vim: set expandtab tabstop=4 shiftwidth=4 autoindent:
