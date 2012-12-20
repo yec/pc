@@ -9,6 +9,39 @@ define('PC_CACHE_DIRNAME' , 'pccache');
 require_once 'lib/PHPExcel/Classes/PHPExcel/IOFactory.php';
 require_once 'lib/Parse.php';
 
+$css = <<<EOT
+.portfolio table {
+    width: 100%;
+}
+.portfolio table th {
+    background-color: black;
+    color: white;
+    padding: 13px 3px 1px 3px;
+}
+.portfolio table td {
+    background-color: white;
+}
+
+.centretitle {
+    background-color: black;
+    color: white;
+    padding: 13px 3px 1px 3px;
+}
+
+.charttitle {
+    border-top: 1px solid black;
+    padding-top:5px;
+    padding-bottom:5px;
+    border-bottom: 1px solid #808084;
+}
+
+.piechart {
+    margin-top:10px;
+}
+EOT;
+
+drupal_add_css( $css, 'inline');
+
 function pc_menu() {
     $items['admin/property-compendium'] = array(
         'title' => 'Property compendium',

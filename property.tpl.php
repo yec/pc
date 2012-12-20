@@ -17,7 +17,7 @@
 </p>
 
 </div>
-<div class="propertytables">
+<div class="portfolio">
 <?php print_r($tables); ?>
 </div>
         </div>
@@ -29,34 +29,4 @@
 <?php print $chart ?>
         </div>
         <!-- // Col 3 -->
-<style>
-.propertytables table {
-    width: 100%;
-}
-.propertytables table th {
-    background-color: black;
-    color: white;
-    padding: 13px 3px 1px 3px;
-}
-.propertytables table td {
-    background-color: white;
-}
-
-.centretitle {
-    background-color: black;
-    color: white;
-    padding: 13px 3px 1px 3px;
-}
-
-.charttitle {
-    border-top: 1px solid black;
-    padding-top:5px;
-    padding-bottom:5px;
-    border-bottom: 1px solid #808084;
-}
-
-.piechart {
-    margin-top:10px;
-}
-</style>
 
