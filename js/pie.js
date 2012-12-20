@@ -77,6 +77,6 @@ var drawPie = function(dataset, element) {
 
 var piedata = {
     values:[200, 200, 200, 200, 200],
-    legend:['legend 1', 'legend 2', 'legend 3', 'legend 4', 'legend 5'],
+    legend:['legend 1', 'legend 2', 'legend 3', 'legend 4', 'legend 5']
 };
 

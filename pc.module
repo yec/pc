@@ -73,6 +73,23 @@ EOT;
 
 drupal_add_css( $css, 'inline');
 
+// R2D3 makes d3 compatible with internet explorer
+$mpath = base_path().drupal_get_path('module', 'pc');
+$script = <<<EOT
+<!--[if lte IE 8]><script src="$mpath/lib/r2d3.v2.js"></script><![endif]-->
+<!--[if gte IE 9]><!-->
+<script src="$mpath/lib/d3/d3.v2.js"></script>
+<!--<![endif]-->
+
+EOT;
+
+$r2d3 = array(
+    '#markup' => $script,
+    '#type' => 'markup',
+    '#weight' => -999,
+);
+drupal_add_html_head($r2d3, 'r2d3');
+
 function pc_menu() {
     $items['admin/property-compendium'] = array(
         'title' => 'Property compendium',
@@ -189,7 +206,6 @@ function pc_theme() {
  */
 function theme_pie($variables) {
 
-    drupal_add_js( drupal_get_path('module', 'pc') . '/lib/d3/d3.v2.js');
     drupal_add_js( drupal_get_path('module', 'pc') . '/js/pie.js', array('weight' => 99));
     $id = rand();
 
