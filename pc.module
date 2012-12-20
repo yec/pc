@@ -16,6 +16,9 @@ define('PC_EXCEL_GROSS_LETTABLE_AREA'  , 'd82:e88');
 define('PC_EXCEL_ASSET_VALUE'          , 'g82:h88');
 define('PC_EXCEL_NET_OPERATING_INCOME' , 'j82:k88');
 
+define('PC_EXCEL_JV' , 'c109:d110');
+define('PC_EXCEL_JVM' , 'g109:k120');
+
 require_once 'lib/PHPExcel/Classes/PHPExcel/IOFactory.php';
 require_once 'lib/Parse.php';
 
@@ -373,4 +376,18 @@ function pc_excel_range($range) {
         FALSE);
 
     return $rows;
+}
+
+function pc_piedata_from_rows($rows) {
+
+    $piedata = array();
+    $piedata['legend'] = array();
+    $piedata['values'] = array();
+
+    foreach($rows as $row) {
+        $piedata['legend'][] = $row[0];
+        $piedata['values'][] = preg_replace('/[^\d\.]/', '', end($row));
+    }
+
+    return $piedata;
 }

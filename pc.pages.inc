@@ -28,7 +28,37 @@ function pc_lep() {
 }
 
 function pc_jvp() {
-    // todo
+    $render = array();
+
+    $render[] = array(
+        '#type' => 'markup',
+        '#markup' => '<div class="portfolioheading">Joint Venture Partners</div>'
+    );
+
+    $charts = array(
+        'WRT/WDC Joint Ventures'          => pc_excel_range(PC_EXCEL_JV),
+        'WRT/WDC Multiple Joint Ventures' => pc_excel_range(PC_EXCEL_JVM)
+    );
+
+    foreach ($charts as $title => $rows) {
+        $piedata = pc_piedata_from_rows($rows);
+        $render[] = array(
+            '#prefix' => '<div class="col3">',
+            '#suffix' => '</div>',
+            array(
+                '#type' => 'markup',
+                '#prefix' => '<div class="charttitle">',
+                '#suffix' => '</div>',
+                '#markup' => $title
+            ),
+            array(
+                '#theme' => 'pie',
+                '#piedata' => $piedata
+            )
+        );
+    }
+
+    return $render;
 }
 
 function pc_pgd() {
