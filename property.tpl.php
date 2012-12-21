@@ -24,7 +24,7 @@
         <!-- // Col 2 -->
         
         <!-- Col 3 -->
-        <div id="content-col3" >
+        <div id="content-col3" style="margin-right:0">
 <div class="charttitle"> Centre Composition by GLA </div>
 <?php print $chart ?>
         </div>
