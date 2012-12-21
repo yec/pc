@@ -1,4 +1,27 @@
+/**
+ * if supports vml
+ */
+function supportsVml() {
+    if (typeof supportsVml.supported == "undefined") {
+        var a = document.body.appendChild(document.createElement('div'));
+        a.innerHTML = '<v:shape id="vml_flag1" adj="1" />';
+        var b = a.firstChild;
+        b.style.behavior = "url(#default#VML)";
+        supportsVml.supported = b ? typeof b.adj == "object": true;
+        a.parentNode.removeChild(a);
+    }
+    return supportsVml.supported
+}
+
+
 var drawPie = function(dataset, element) {
+    /**
+     * if supports vml then is IE
+     * set some things for it
+     */
+    var vertical_text_offset = supportsVml() ? 4:0;
+    var circle_stroke_thickness = supportsVml() ? 1.5:1;
+
     var width = 132,
         radius = width / 2;
 
@@ -35,44 +58,50 @@ var drawPie = function(dataset, element) {
     var svg = d3.select(element).append("svg")
         .attr("width", 227)
         .attr("height", height)
-        .append("g")
+        .append("g");
+
+    svg.append('circle')
+        .style('stroke', '#d8d8d8')
+        .style('fill', 'white')
+        .style('stroke-width', circle_stroke_thickness)
+        .attr('r', radius - 1)
         .attr("transform", "translate(" + width / 2 + "," + width / 2 + ")");
 
     svg.append('circle')
         .style('stroke', '#d8d8d8')
-        .style('fill', 'transparent')
-        .style('stroke-width','1px')
-        .attr('r', radius - 1);
-
-    svg.append('circle')
-        .style('stroke', '#d8d8d8')
-        .style('fill', 'transparent')
-        //.style('stroke-width','1px')
-        .attr('r', radius - 19);
-
-    for (i in dataset.legend) {
-
-        svg.append('rect')
-            .attr('fill', colorfn(i))
-            .attr('width', 8)
-            .attr('height', 8)
-            .attr('x', -radius + 6)
-            .attr('y', 18*i + radius + 20);
-
-        svg.append('text')
-            .text(dataset.legend[i])
-            .attr('font-family', 'helvetica')
-            .attr('font-size', '12px')
-            .attr('x', -radius + 20)
-            .attr('y', 18*i + radius + 28);
-
-    }
+        .style('fill', 'white')
+        .style('stroke-width', circle_stroke_thickness)
+        .attr('r', radius - 19)
+        .attr("transform", "translate(" + width / 2 + "," + width / 2 + ")");
 
     var path = svg.selectAll("path")
         .data(pie(dataset.values))
         .enter().append("path")
         .attr("fill", function(d, i) { return colorfn(i); })
-        .attr("d", arc);
+        .attr("d", arc)
+        .attr('class', 'noborder')
+        .attr("transform", "translate(" + width / 2 + "," + width / 2 + ")");
+
+    for (i in dataset.legend) {
+        // Draw legend boxes
+        svg.append('rect')
+            .attr('fill', colorfn(i))
+            .attr('width', 8)
+            .attr('height', 8)
+            .attr('x', 0)
+            .attr('y', 18*i)
+            .attr('class', 'noborder')
+            .attr("transform", "translate(10," + (width + 15) + ")");
+        // Draw legend text
+        svg.append('text')
+            .text(dataset.legend[i])
+            .attr('font-family', 'helvetica')
+            .attr('font-size', '12px')
+            .attr('text-anchor', 'start')
+            .attr('y', 18*i - vertical_text_offset)
+            .attr("transform", "translate(23," + (width + 23) + ")");
+    }
+
 };
 
 var piedata = {

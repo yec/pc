@@ -69,6 +69,13 @@ $css = <<<EOT
     margin-right:5px;
     margin-top:10px;
 }
+
+/* Set no border for r2d3 pie */
+.noborder {
+    stroke: white;
+    stroke-width: 0;
+}
+
 EOT;
 
 drupal_add_css( $css, 'inline');
