@@ -40,9 +40,9 @@ function pc_upload_form($form, &$form_state) {
 
     $form = array();
 
-    $fid = variable_get('compendium', false);
+    $file = file_load(variable_get('compendium', false));
 
-    if ($fid == false) {
+    if ($file == false) {
             $instruction = '<h1>Upload property compendium file. xlsx or xlsm</h1>';
     } else {
             $instruction = "<h1>You already have a compendium file.</h1><h1>Only upload a new file if you want to replace the current compendium file. </h1>";
