@@ -246,7 +246,8 @@ function pc_process_sheet_from_title($title) {
     } else {
         $file = file_load(variable_get('compendium', false));
         $filepath = drupal_realpath($file->uri);
-        $objPHPExcel = PHPExcel_IOFactory::load($filepath);
+        $ireader = PHPExcel_IOFactory::createReaderForFile($filepath);
+        $objPHPExcel = $ireader->load($filepath);
         $sheet = $objPHPExcel->getSheetByName($title);
         $data = pc_process_sheet($sheet);
         file_put_contents($cachefile, json_encode($data));
@@ -258,17 +259,17 @@ function pc_process_sheet($sheet) {
     $rowmax = $sheet->getHighestRow();
     $parse = new Parse();
     $title = $sheet->getTitle();
-
-    for ($row = 1; $row <=$rowmax; $row++) {
-        // read row of data into an array
-        $loc = COL_START . $row . ':'. COL_END . $row;
-
-        $rowData = $sheet->rangeToArray($loc,
-            NULL,
-            TRUE,
-            TRUE);
-
-        $parse->processRow($rowData[0]);
+    $pRange = COL_START . 1 . ':'. COL_END . $rowmax;
+    $nullValue = NULL;
+    $calculateFormulas = TRUE;
+    $formatData = TRUE;
+    $rowData = $sheet->rangeToArray(
+        $pRange
+        , $nullValue
+        , $calculateFormulas
+        , $formatData);
+    foreach ( $rowData as $row ) {
+        $parse->processRow($row);
     }
     $data = $parse->propertyData();
     $data['title'] = $title;
