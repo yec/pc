@@ -129,8 +129,8 @@ function pc_overview_summary() {
 }
 
 function pc_overview(){
-	//drupal_goto( 'property-portfolio/overview/summary' );
-	drupal_not_found();
+	drupal_goto( 'property-portfolio/overview/summary' );
+	//drupal_not_found();
 }
 
 // vim: set expandtab tabstop=4 shiftwidth=4 autoindent:
