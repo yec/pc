@@ -140,6 +140,13 @@ function pc_menu() {
         'access callback' => true
     );
 
+	$items['property-portfolio/overview'] = array(
+        'title' => 'Portfolio Overview',
+        'page callback' => "pc_overview",
+        'file' => 'pc.pages.inc',
+        'access callback' => true
+    );
+
     $items['property-portfolio/overview/portfolio-geographical-diversification'] = array(
         'title' => 'Portfolio Geographical Diversification',
         'page callback' => 'pc_pgd',
