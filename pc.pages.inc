@@ -133,4 +133,27 @@ function pc_overview(){
 	//drupal_not_found();
 }
 
-// vim: set expandtab tabstop=4 shiftwidth=4 autoindent:
+function pc_generate_pdf( $title )
+{
+	// Load the file.
+	$file = file_load(variable_get('compendium', false));
+	$filepath = drupal_realpath($file->uri);
+	
+	// Get xls Data.
+	$data = pc_process_sheet_from_title( $title );
+	
+	// Generate an image of the chart.
+	
+	
+	// Generate a PDF.
+	$html =
+	  '<html><body>'.
+	  '<h1>' . $title . '</h1>'.
+	  '<img src="http://localhost/' . base_path() .'sites/default/files/chatswood_chart.png' . '" />'.
+	  '</body></html>';
+
+	$dompdf = new DOMPDF();
+	$dompdf->load_html($html);
+	$dompdf->render();
+	$dompdf->stream( $title . ".pdf");
+}

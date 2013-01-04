@@ -30,6 +30,7 @@ define('COL_VISIBILITY' , 'I');      // The column that toggles visibility in xl
 define('PC_CACHE_DIRNAME' , 'pccache');
 
 require_once 'lib/PHPExcel/Classes/PHPExcel/IOFactory.php';
+require_once 'lib/dompdf/dompdf_config.inc.php';
 require_once 'lib/Parse.php';
 require_once 'pc.menu.inc';
 
