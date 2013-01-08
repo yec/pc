@@ -1,7 +1,88 @@
 <?php
 
-function pc_property_page($pc_property) {
+function pc_centre_profiles() {
+	// Redirect to the first Centre Profile (ACT)
+	drupal_goto('property-portfolio/centre-profiles/act');
+}
 
+function pc_generate_profile_link($profile) {
+	return '<a href="../profiles/' . str_replace( ' ', '-', $profile ) . '">' . $profile . '</a>';
+}
+
+function pc_centre_profiles_act() {
+	$properties = pc_get_properties_from_region('act');
+	for( $i=0; $i<count($properties); $i++) {
+		$link = pc_generate_profile_link($properties[$i]);
+		$properties[$i] = $link;
+	}
+	
+	$theme_args = array( 'items' => $properties, 'type' => 'ul', 'attributes' => array( 'class' => 'briefcase_links' ) );
+	return theme('item_list', $theme_args );
+}
+
+function pc_centre_profiles_nsw() {
+	$properties = pc_get_properties_from_region('nsw');
+	for( $i=0; $i<count($properties); $i++) {
+		$link = pc_generate_profile_link($properties[$i]);
+		$properties[$i] = $link;
+	}
+	$theme_args = array( 'items' => $properties, 'type' => 'ul', 'attributes' => array( 'class' => 'briefcase_links' ) );
+	return theme('item_list', $theme_args );
+}
+
+function pc_centre_profiles_qld() {
+	$properties = pc_get_properties_from_region('qld');
+	for( $i=0; $i<count($properties); $i++) {
+		$link = pc_generate_profile_link($properties[$i]);
+		$properties[$i] = $link;
+	}
+	$theme_args = array( 'items' => $properties, 'type' => 'ul', 'attributes' => array( 'class' => 'briefcase_links' ) );
+	return theme('item_list', $theme_args );
+}
+
+function pc_centre_profiles_sa() {
+	$properties = pc_get_properties_from_region('sa');
+	for( $i=0; $i<count($properties); $i++) {
+		$link = pc_generate_profile_link($properties[$i]);
+		$properties[$i] = $link;
+	}
+	$theme_args = array( 'items' => $properties, 'type' => 'ul', 'attributes' => array( 'class' => 'briefcase_links' ) );
+	return theme('item_list', $theme_args );
+}
+
+function pc_centre_profiles_vic() {
+	$properties = pc_get_properties_from_region('vic');
+	for( $i=0; $i<count($properties); $i++) {
+		$link = pc_generate_profile_link($properties[$i]);
+		$properties[$i] = $link;
+	}
+	$theme_args = array( 'items' => $properties, 'type' => 'ul', 'attributes' => array( 'class' => 'briefcase_links' ) );
+	return theme('item_list', $theme_args );
+}
+
+function pc_centre_profiles_wa() {
+	$properties = pc_get_properties_from_region('wa');
+	for( $i=0; $i<count($properties); $i++) {
+	$link = pc_generate_profile_link($properties[$i]);
+		$properties[$i] = $link;
+	}
+	$theme_args = array( 'items' => $properties, 'type' => 'ul', 'attributes' => array( 'class' => 'briefcase_links' ) );
+	return theme('item_list', $theme_args );
+}
+
+function pc_centre_profiles_nz() {
+	$properties = pc_get_properties_from_region('nz');
+	for( $i=0; $i<count($properties); $i++) {
+		$link = pc_generate_profile_link($properties[$i]);
+		$properties[$i] = $link;
+	}
+	$theme_args = array( 'items' => $properties, 'type' => 'ul', 'attributes' => array( 'class' => 'briefcase_links' ) );
+	return theme('item_list', $theme_args );
+}
+
+function pc_property_page($pc_property) {
+	$menu = menu_tree('navigation');
+	
     foreach($pc_property['tables'] as $table => $rows) {
         $rtables[] = theme('table', array('header' => array(array('data' => $table, 'colspan' => 3)),'rows' => $rows));
     }

@@ -34,6 +34,7 @@ require_once 'lib/dompdf/dompdf_config.inc.php';
 require_once 'lib/Parse.php';
 require_once 'pc.menu.inc';
 
+
 $css = <<<EOT
 .portfolio table {
     width: 100%;
@@ -59,6 +60,7 @@ $css = <<<EOT
     padding-top:5px;
     padding-bottom:5px;
     border-bottom: 1px solid #808084;
+		width: 215px;
 }
 
 .piechart {
@@ -124,14 +126,16 @@ function pc_menu() {
         'file' => 'pc.admin.inc',
         'type' => MENU_LOCAL_TASK
     );
-
+		
     $items['property-portfolio/profiles/%pc_property'] = array(
         'title callback' => 'pc_title',
         'title arguments' => array(2),
         'page callback' => 'pc_property_page',
         'page arguments' => array(2),
+				'menu_name' => 'navigation',
+				'type' => MENU_NORMAL_ITEM,
         'file' => 'pc.pages.inc',
-        'access callback' => true
+        'access callback' => true,
     );
 
     $items['property-portfolio/overview/summary'] = array(
@@ -141,12 +145,70 @@ function pc_menu() {
         'access callback' => true
     );
 
-	$items['property-portfolio/overview'] = array(
+		$items['property-portfolio/overview'] = array(
         'title' => 'Portfolio Overview',
         'page callback' => "pc_overview",
         'file' => 'pc.pages.inc',
         'access callback' => true
     );
+
+		$items['property-portfolio/centre-profiles'] = array(
+	        'title' => 'Centre Profiles',
+	        'page callback' => "pc_centre_profiles",
+	        'file' => 'pc.pages.inc',
+	        'access callback' => true
+	  );
+		
+		// Regional Centre Profiles callbacks.
+		
+		$items['property-portfolio/centre-profiles/act'] = array(
+	        'title' => 'Centre Profiles - Australian Capital Territory',
+	        'page callback' => "pc_centre_profiles_act",
+	        'file' => 'pc.pages.inc',
+	        'access callback' => true
+	  );
+	
+		$items['property-portfolio/centre-profiles/nsw'] = array(
+	        'title' => 'Centre Profiles - New South Wales',
+	        'page callback' => "pc_centre_profiles_nsw",
+	        'file' => 'pc.pages.inc',
+	        'access callback' => true
+	  );
+	
+		$items['property-portfolio/centre-profiles/qld'] = array(
+	        'title' => 'Centre Profiles - Queensland',
+	        'page callback' => "pc_centre_profiles_qld",
+	        'file' => 'pc.pages.inc',
+	        'access callback' => true
+	  );
+	
+		$items['property-portfolio/centre-profiles/sa'] = array(
+	        'title' => 'Centre Profiles - South Australia',
+	        'page callback' => "pc_centre_profiles_sa",
+	        'file' => 'pc.pages.inc',
+	        'access callback' => true
+	  );
+	
+		$items['property-portfolio/centre-profiles/vic'] = array(
+	        'title' => 'Centre Profiles - Victoria',
+	        'page callback' => "pc_centre_profiles_vic",
+	        'file' => 'pc.pages.inc',
+	        'access callback' => true
+	  );
+	
+		$items['property-portfolio/centre-profiles/wa'] = array(
+	        'title' => 'Centre Profiles - Western Australia',
+	        'page callback' => "pc_centre_profiles_wa",
+	        'file' => 'pc.pages.inc',
+	        'access callback' => true
+	  );
+	
+		$items['property-portfolio/centre-profiles/nz'] = array(
+	        'title' => 'Centre Profiles - New Zealand',
+	        'page callback' => "pc_centre_profiles_nz",
+	        'file' => 'pc.pages.inc',
+	        'access callback' => true
+	  );
 
     $items['property-portfolio/overview/portfolio-geographical-diversification'] = array(
         'title' => 'Portfolio Geographical Diversification',
@@ -195,10 +257,11 @@ function pc_property_load($urititle) {
     return $data;
 }
 
+
 /**
- * hook_theme
+ * Implements hook_theme.
  */
-function pc_theme() {
+function pc_theme($existing, $type, $theme, $path) {
     return array(
         'pie' => array(
             'variables' => array('piedata' => array())
@@ -211,7 +274,12 @@ function pc_theme() {
                 , 'centre_narrative' => NULL
             ),
             'template' => 'property'
-        )
+        ),
+				'briefcase-links' => array(
+						'variables' => array('content' => NULL),
+						'path' => drupal_get_path('module',  'wrt006') . '/theme',
+						'file' => 'briefcase-links',
+				),
     );
 }
 
@@ -235,6 +303,65 @@ drawPie(piedata$id, '#pie$id');
 </script>
 EOT;
 
+}
+
+/**
+ * TODO: Write Documentation
+ */
+function pc_get_properties_from_region($region) {
+	// Load the Property Compendium Excel file's Portfolio sheet.
+	$file = file_load(variable_get('compendium', false));
+	if($file == false) {
+		// Error handeling
+	}
+	
+  $filepath = drupal_realpath($file->uri);
+  $ireader = PHPExcel_IOFactory::createReaderForFile($filepath);
+  $ireader->setLoadSheetsOnly('Portfolio');
+  $objPHPExcel = $ireader->load($filepath);
+	
+	// Get the active sheet.
+	$sheet = $objPHPExcel->getSheet(0);
+	
+	// Read the Excel file.
+	$rowmax = $sheet->getHighestRow();
+	$pRange = 'C' . 1 . ':'. 'C' . $rowmax;
+	$rowData = $sheet->rangeToArray( $pRange, NULL, TRUE, TRUE );
+	
+	$properties = array();
+	
+	$regions = array(
+		'act' => 'Australian Capital Territory',
+		'nsw' => 'New South Wales',
+		'qld' => 'Queensland',
+		'sa' => 'South Australia',
+		'vic' => 'Victoria',
+		'wa' => 'Western Australia',
+		'nz' => 'New Zealand',
+	);
+	
+	$record = 'none';
+	
+	foreach( $rowData as $row ){
+		if( $row[0] == $regions[$region] )
+			$record = $region;
+		if( $row[0] == '' || $row[0] == ' ' )
+			$record = 'none';
+		
+		$str = '-' . $record . '-';
+		
+		if( $str == '-' . $region . '-' )
+			array_push($properties, $row[0]);
+	}
+	
+	array_shift( $properties );
+	
+	if( $region == 'nz' ){
+		array_shift( $properties );
+		array_shift( $properties );
+	}
+	
+	return $properties;
 }
 
 function pc_process_sheet_from_title($title) {
